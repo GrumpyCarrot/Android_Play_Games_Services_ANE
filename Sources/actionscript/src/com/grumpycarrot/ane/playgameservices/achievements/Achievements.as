@@ -38,7 +38,7 @@ package com.grumpycarrot.ane.playgameservices.achievements
 		}			
 		//---------------------------------------------------
 		public function setStepsAchivement(achievementId:String,numSteps:int):void { 
-			_context.call("setStepsAchivement", achievementId,numSteps);
+			_context.call("setStepsAchievement", achievementId,numSteps);
 		}			
 		//---------------------------------------------------
 		public function loadAchievements(forceReload:Boolean=true):void

@@ -17,7 +17,7 @@ public class SetStepsAchievementFunction implements FREFunction {
 		try
 		{
 			achievementId = arg1[0].getAsString();
-			numSteps = arg1[0].getAsInt();
+			numSteps = arg1[1].getAsInt();
 
 		}
 		catch (Exception e)
