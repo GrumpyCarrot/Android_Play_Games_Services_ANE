@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension xmlns="http://ns.adobe.com/air/extension/22.0">
+  <id>com.grumpycarrot.ane.playgameservices</id>
+  <versionNumber>1.0</versionNumber>
+  <platforms>
+    <platform name="Android-ARM">
+      <applicationDeployment>
+        <nativeLibrary>playgameservicesane.jar</nativeLibrary>
+        <initializer>com.grumpycarrot.ane.playgameservices.Extension</initializer>
+		<finalizer>com.grumpycarrot.ane.playgameservices.Extension</finalizer> 
+      </applicationDeployment>
+    </platform>
+    <platform name="Android-x86">
+      <applicationDeployment>
+        <nativeLibrary>playgameservicesane.jar</nativeLibrary>
+        <initializer>com.grumpycarrot.ane.playgameservices.Extension</initializer>
+		<finalizer>com.grumpycarrot.ane.playgameservices.Extension</finalizer> 
+      </applicationDeployment>
+    </platform>	
+	<platform name="default">
+		<applicationDeployment />
+	</platform>	
+  </platforms>
+</extension>

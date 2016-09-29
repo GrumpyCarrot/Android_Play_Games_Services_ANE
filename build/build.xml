@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Air Native Extension Build Scripts" default="all">
+
+    <!-- Config -->
+    <property file="build.config"/>
+
+    <!-- All -->
+    <target name="all" depends="android,swc,package,copy" description="Full build of extension"/>
+
+    <!-- Android -->
+    <target name="android" description="Build Android Library">
+        <delete dir="../Sources/android/temp"/>
+        <mkdir dir="../Sources/android/temp/classes"/>
+
+        <echo message="Using Java version ${ant.java.version}."/>
+
+        <javac source="1.6" srcdir="../Sources/android/src" destdir="../Sources/android/temp/classes" includeantruntime="false">
+            <classpath>
+                <pathelement location="${android.sdk}/android.jar"/>
+                <pathelement location="../Sources/android/libs/FlashRuntimeExtensions.jar"/>
+				<pathelement location="../Sources/android/libs/runtimeClasses.jar"/>
+                <pathelement location="../Sources/android/libs/google-play-services.jar"/>
+            </classpath>
+        </javac>
+        
+        <mkdir dir="../Sources/temp/android/"/>
+        <jar basedir="../Sources/android/temp/classes" destfile="../Sources/temp/android/${name}.jar"/>
+		<jar basedir="../Sources/android/temp/classes" destfile="../Sources/temp/android-x86/${name}.jar"/>
+        <delete dir="../Sources/android/temp"/>
+    </target>
+
+    <!-- Actionscript -->
+    <target name="swc" description="Build SWC library">
+        <mkdir dir="../Sources/temp/swc/content/"/>
+
+        <fileset dir="../Sources/actionscript/src" casesensitive="yes" id="classfiles">
+            <include name="**/*.as"/>
+        </fileset>
+
+        <pathconvert property="classlist" refid="classfiles" pathsep=" " dirsep=".">
+            <regexpmapper from=".*src.(.*)\.as" to="\1"/>
+        </pathconvert>
+
+        <exec executable="${flex.sdk}/bin/compc${bin.ext}" failonerror="true">
+            <env key="AIR_SDK_HOME" value="${flex.sdk}"/>
+            <arg line='-source-path ../Sources/actionscript/src'/>
+            <arg line='-output ../Sources/temp/swc/${name}.swc'/>
+            <arg line='-swf-version=25'/>
+            <arg line='-external-library-path+="${flex.sdk}/frameworks/libs/air/airglobal.swc"'/>
+            <arg line='-include-classes ${classlist}'/>
+        </exec>
+
+        <unzip src="../Sources/temp/swc/${name}.swc" dest="../Sources/temp/swc/content" overwrite="true"/>
+        <copy file="../Sources/temp/swc/content/library.swf" todir="../Sources/temp/android" overwrite="true"/>
+		<copy file="../Sources/temp/swc/content/library.swf" todir="../Sources/temp/android-x86" overwrite="true"/>
+        <copy file="../Sources/temp/swc/content/library.swf" todir="../Sources/temp/default" overwrite="true"/>
+        <delete dir="../Sources/temp/swc/content/"/>
+    </target>
+
+    <!-- Package -->
+    <target name="package" description="Create the extension package">
+        <exec executable="${air.sdk}/bin/adt.bat" failonerror="true" dir="../Sources/temp">
+            <arg value="-package"/>
+            <arg value="-target"/>
+            <arg value="ane"/>
+            <arg value="${name}.ane"/>
+            <arg value="../../build/extension.xml"/>
+            <arg line="-swc swc/${name}.swc"/>
+            <arg line="-platform Android-ARM -C android/ ."/>
+			<arg line="-platform Android-x86 -C android-x86/ ."/>
+            <arg line="-platform default -C default/ ."/>
+        </exec>
+
+        <move file="../Sources/temp/${name}.ane" todir="../bin"/>
+        <delete dir="../Sources/temp"/>
+    </target>
+    
+	<target name="copy" description="Copy the ane to the current directory">
+        <copy file="../bin/${name}.ane" todir="${copyDir}" overwrite="true"/>
+	</target>
+</project>
