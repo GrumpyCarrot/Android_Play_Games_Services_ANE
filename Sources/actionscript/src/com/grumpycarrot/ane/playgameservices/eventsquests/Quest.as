@@ -33,7 +33,7 @@ package com.grumpycarrot.ane.playgameservices.eventsquests
 		//---------------------------------------------------------------------------------------------------
 		public function Quest( questId:String,name:String=null,description:String=null,
 							   iconImageUrl:String=null,bannerImageUrl:String=null,iconImageUri:String=null,bannerImageUri:String=null,
-							   startTimestamp:Number=-1,endTimestamp:Number=-1,isEndingSoon=false,acceptedTimestamp:Number=-1,lastUpdatedTimestamp:Number=-1,state:int=-1,milestone:Milestone=null)
+							   startTimestamp:Number=-1,endTimestamp:Number=-1,isEndingSoon:Boolean=false,acceptedTimestamp:Number=-1,lastUpdatedTimestamp:Number=-1,state:int=-1,milestone:Milestone=null)
 		{
 			_questId = questId;
 			_name = name;
